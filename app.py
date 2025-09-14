@@ -36,7 +36,7 @@ st.markdown("""
     .logo-container {
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: flex-start; /* بدل ما كانت يمين خليتها شمال */
     }
     .logo-text {
         color: #FF0000;
@@ -55,11 +55,15 @@ st.markdown("""
 # =======================
 st.markdown("<div class='header-container'>", unsafe_allow_html=True)
 
-# Left side - Name
-st.markdown(
-    "<p style='font-size:16px; color:#ffffff; margin: 0;'>Made by Eng/Youssef Abdelnasser</p>",
-    unsafe_allow_html=True
-)
+# Left side - Logo + Text
+st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
+st.markdown("<p class='logo-text'>Tips Hindawi</p>", unsafe_allow_html=True)
+try:
+    logo = Image.open("Tips Hindawi.jpg")  # اللوجو الجديد اللي رفعته
+    st.image(logo, width=90)
+except:
+    pass
+st.markdown("</div>", unsafe_allow_html=True)
 
 # Center - Title
 st.markdown(
@@ -67,15 +71,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Right side - Logo + Text
-st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
-st.markdown("<p class='logo-text'>Tips Hindawi</p>", unsafe_allow_html=True)
-try:
-    logo = Image.open("Tips Hindawi.jpg")  # اسم اللوجو اللي رفعته
-    st.image(logo, width=90)
-except:
-    pass
-st.markdown("</div>", unsafe_allow_html=True)
+# Right side - Name
+st.markdown(
+    "<p style='font-size:16px; color:#ffffff; margin: 0;'>Made by Eng/Youssef Abdelnasser</p>",
+    unsafe_allow_html=True
+)
 
 st.markdown("</div>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
