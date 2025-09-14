@@ -46,7 +46,7 @@ with col2:
 
 with col3:
     try:
-        logo = Image.open("")
+        logo = Image.open("Tips Hindawi.jpg")
         st.image(logo, width=90)
         st.markdown(
             "<p style='text-align:center; color:#FF0000; font-weight:bold;'>Tips Hindawi</p>",
