@@ -93,7 +93,6 @@ except:
 st.markdown("</div>", unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)  # Close header-container
 st.markdown("<hr>", unsafe_allow_html=True)
-
 # =======================
 # API Config
 # =======================
