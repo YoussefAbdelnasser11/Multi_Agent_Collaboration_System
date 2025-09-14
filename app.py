@@ -37,15 +37,22 @@ st.markdown("""
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        margin-top: 0; /* Ensure no extra space above */
+        padding-top: 0; /* Remove any padding */
     }
     .logo-text {
         color: #FF0000;
         font-weight: bold;
         font-size: 18px;
-        margin-bottom: 5px;
+        margin-bottom: 2px; /* Tighten space between text and image */
+        padding: 0; /* Remove padding to bring text higher */
+        line-height: 1; /* Reduce line height for tighter appearance */
     }
     .main-content {
         margin-top: -20px; 
+    }
+    .st-image {
+        margin-top: 0; /* Ensure no extra space above the image */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -68,10 +75,10 @@ st.markdown(
 )
 
 # Right side - Logo + Text
-st.markdown("<div class='logo-container' style='align-items: flex-end;'>", unsafe_allow_html=True)
+st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
 
 # الكلمة
-st.markdown("<p class='logo-text' style='text-align: right;'>Tips Hindawi</p>", unsafe_allow_html=True)
+st.markdown("<p class='logo-text'>Tips Hindawi</p>", unsafe_allow_html=True)
 
 # اللوجو
 try:
@@ -79,8 +86,6 @@ try:
     st.image(logo, width=90)
 except:
     pass
-
-# الاسم تحت اللوجو
 
 st.markdown("</div>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
