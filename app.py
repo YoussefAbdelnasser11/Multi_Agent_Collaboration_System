@@ -68,14 +68,19 @@ st.markdown(
 )
 
 # Right side - Logo + Text
-st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
-st.markdown("<p class='logo-text'>Tips Hindawi</p>", unsafe_allow_html=True)
+st.markdown("<div class='logo-container' style='align-items: flex-end;'>", unsafe_allow_html=True)
+
+# الكلمة
+st.markdown("<p class='logo-text' style='text-align: right;'>Tips Hindawi</p>", unsafe_allow_html=True)
+
+# اللوجو
 try:
-    logo = Image.open("1e68a801-317e-4a37-80ff-64442ab00554.png")  # اسم اللوجو اللي رفعته
+    logo = Image.open("Tips Hindawi.jpg")
     st.image(logo, width=90)
 except:
     pass
-st.markdown("</div>", unsafe_allow_html=True)
+
+# الاسم تحت اللوجو
 
 st.markdown("</div>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
