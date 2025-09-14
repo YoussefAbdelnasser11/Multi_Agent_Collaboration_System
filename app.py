@@ -34,25 +34,28 @@ st.markdown("""
         margin-bottom: 10px;
     }
     .logo-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        margin-top: 0; /* Ensure no extra space above */
-        padding-top: 0; /* Remove any padding */
+        margin-top: 0;
+        padding-top: 0;
     }
     .logo-text {
         color: #FF0000;
         font-weight: bold;
         font-size: 18px;
-        margin-bottom: 2px; /* Tighten space between text and image */
-        padding: 0; /* Remove padding to bring text higher */
-        line-height: 1; /* Reduce line height for tighter appearance */
+        margin-bottom: 2px;
+        padding: 0;
+        line-height: 1;
     }
     .main-content {
-        margin-top: -20px; 
+        margin-top: 50px; /* Adjust to avoid overlap with logo */
     }
     .st-image {
-        margin-top: 0; /* Ensure no extra space above the image */
+        margin-top: 0;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -74,7 +77,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Right side - Logo + Text
+# Right side - Logo + Text (moved to top right)
 st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
 
 # الكلمة
@@ -88,6 +91,7 @@ except:
     pass
 
 st.markdown("</div>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)  # Close header-container
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # =======================
