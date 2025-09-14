@@ -36,7 +36,7 @@ st.markdown("""
 col1, col2 = st.columns([8, 2])
 
 with col2:
-    logo = Image.open("Screenshot 2025-09-12 011923.png")  # Make sure logo file is in the same folder
+    logo = Image.open("Tips Hindawi.jpg")  # Make sure logo file is in the same folder
     st.image(logo, width=90)
 
     st.markdown(
