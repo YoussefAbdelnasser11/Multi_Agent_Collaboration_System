@@ -27,36 +27,52 @@ st.markdown("""
     hr {
         border: 1px solid #444;
     }
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 20px;
+    }
+    .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # =======================
-# Header + Logo
+# Header Layout
 # =======================
-col1, col2, col3 = st.columns([2, 6, 2])
+st.markdown("<div class='header-container'>", unsafe_allow_html=True)
 
-with col1:
+# Left side - Name
+st.markdown(
+    "<p style='font-size:16px; color:#ffffff; margin-top: 0;'>Made by Eng/Youssef Abdelnasser</p>",
+    unsafe_allow_html=True
+)
+
+# Center - Title (using empty columns to center it)
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
     st.markdown(
-        "<p style='font-size:16px; color:#ffffff;'>Made by Eng/Youssef Abdelnasser</p>",
+        "<h1 style='text-align: center; margin-top: 10px;'>🤖 Multi Agent Collaboration System</h1>",
         unsafe_allow_html=True
     )
 
-with col2:
-    st.title("🤖 Multi Agent Collaboration System")
-
-with col3:
+# Right side - Logo and Tips Hindawi
+with st.container():
     try:
-        logo = Image.open("Tips Hindawi.jpg")
+        logo = Image.open(".png")
         st.image(logo, width=90)
-        st.markdown(
-            "<p style='text-align:center; color:#FF0000; font-weight:bold;'>Tips Hindawi</p>",
-            unsafe_allow_html=True
-        )
     except:
-        st.markdown(
-            "<p style='text-align:center; color:#FF0000; font-weight:bold;'>Tips Hindawi</p>",
-            unsafe_allow_html=True
-        )
+        pass
+    st.markdown(
+        "<p style='text-align: right; color:#FF0000; font-weight:bold; margin-top: 0;'>Tips Hindawi</p>",
+        unsafe_allow_html=True
+    )
+
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("<hr>", unsafe_allow_html=True)
 
@@ -64,7 +80,7 @@ st.markdown("<hr>", unsafe_allow_html=True)
 # API Config
 # =======================
 API_URL = "https://f6a6d0a4f2c1.ngrok-free.app"
-API_KEY = "secret123"  # change if needed
+API_KEY = "secret123"
 
 # =======================
 # User Interface - Centered Content
@@ -77,7 +93,7 @@ col_left, col_center, col_right = st.columns([1, 2, 1])
 with col_center:
     topic = st.text_input("📝 Enter a topic to analyze:", key="topic_input")
     
-    if st.button("Analyze", key="analyze_btn"):
+    if st.button("Analyze", key="analyze_btn", type="primary"):
         if topic.strip() == "":
             st.warning("⚠️ Please enter a topic to analyze")
         else:
