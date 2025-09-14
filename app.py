@@ -30,16 +30,22 @@ st.markdown("""
     .header-container {
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 5px;
+        align-items: center;
+        margin-bottom: 10px;
     }
     .logo-container {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
     }
+    .logo-text {
+        color: #FF0000;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
     .main-content {
-        margin-top: -30px; /* رفع الصفحة لفوق بعد الخط */
+        margin-top: -20px; 
     }
     </style>
 """, unsafe_allow_html=True)
@@ -51,33 +57,27 @@ st.markdown("<div class='header-container'>", unsafe_allow_html=True)
 
 # Left side - Name
 st.markdown(
-    "<p style='font-size:16px; color:#ffffff; margin-top: 0;'>Made by Eng/Youssef Abdelnasser</p>",
+    "<p style='font-size:16px; color:#ffffff; margin: 0;'>Made by Eng/Youssef Abdelnasser</p>",
     unsafe_allow_html=True
 )
 
 # Center - Title
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.markdown(
-        "<h1 style='text-align: center; margin-top: 10px; font-size: 32px;'>🤖 Multi Agent Collaboration System</h1>",
-        unsafe_allow_html=True
-    )
-
-# Right side - Tips Hindawi above logo
-st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
 st.markdown(
-    "<p style='text-align: right; color:#FF0000; font-weight:bold; margin-bottom: 5px; font-size: 18px;'>Tips Hindawi</p>",
+    "<h1 style='text-align: center; margin: 0; font-size: 32px;'>🤖 Multi Agent Collaboration System</h1>",
     unsafe_allow_html=True
 )
+
+# Right side - Logo + Text
+st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
+st.markdown("<p class='logo-text'>Tips Hindawi</p>", unsafe_allow_html=True)
 try:
-    logo = Image.open("Tips Hindawi.jpg")
+    logo = Image.open("Tips Hindawi.jpg")  # اسم اللوجو اللي رفعته
     st.image(logo, width=90)
 except:
     pass
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
-
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # =======================
@@ -92,7 +92,7 @@ API_KEY = "secret123"
 st.markdown("<div class='main-content'>", unsafe_allow_html=True)
 
 st.markdown(
-    "<p style='font-size: 18px; text-align: center; margin-top: 10px;'>Analyze topics using a collaborative multi-agent system.</p>",
+    "<p style='font-size: 18px; text-align: center;'>Analyze topics using a collaborative multi-agent system.</p>",
     unsafe_allow_html=True
 )
 
