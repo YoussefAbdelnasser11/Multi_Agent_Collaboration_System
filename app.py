@@ -31,12 +31,15 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }
     .logo-container {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+    }
+    .main-content {
+        margin-top: -30px; /* رفع الصفحة لفوق بعد الخط */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -52,25 +55,26 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Center - Title (using empty columns to center it)
+# Center - Title
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.markdown(
-        "<h1 style='text-align: center; margin-top: 20px; font-size: 32px;'>🤖 Multi Agent Collaboration System</h1>",
+        "<h1 style='text-align: center; margin-top: 10px; font-size: 32px;'>🤖 Multi Agent Collaboration System</h1>",
         unsafe_allow_html=True
     )
 
 # Right side - Tips Hindawi above logo
-with st.container():
-    st.markdown(
-        "<p style='text-align: right; color:#FF0000; font-weight:bold; margin-bottom: 5px; font-size: 18px;'>Tips Hindawi</p>",
-        unsafe_allow_html=True
-    )
-    try:
-        logo = Image.open("Tips Hindawi.jpg")
-        st.image(logo, width=90)
-    except:
-        pass
+st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
+st.markdown(
+    "<p style='text-align: right; color:#FF0000; font-weight:bold; margin-bottom: 5px; font-size: 18px;'>Tips Hindawi</p>",
+    unsafe_allow_html=True
+)
+try:
+    logo = Image.open("Tips Hindawi.jpg")
+    st.image(logo, width=90)
+except:
+    pass
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
 
@@ -83,14 +87,15 @@ API_URL = "https://f6a6d0a4f2c1.ngrok-free.app"
 API_KEY = "secret123"
 
 # =======================
-# User Interface - Centered Content with larger font
+# User Interface - Centered Content
 # =======================
+st.markdown("<div class='main-content'>", unsafe_allow_html=True)
+
 st.markdown(
-    "<p style='font-size: 18px; text-align: center; margin-top: 30px;'>Analyze topics using a collaborative multi-agent system.</p>",
+    "<p style='font-size: 18px; text-align: center; margin-top: 10px;'>Analyze topics using a collaborative multi-agent system.</p>",
     unsafe_allow_html=True
 )
 
-# Center the input and button
 col_left, col_center, col_right = st.columns([1, 2, 1])
 
 with col_center:
@@ -112,13 +117,11 @@ with col_center:
                     data = response.json()
                     st.success("✅ Analysis Complete!")
                     
-                    # Display results in a nice format with larger font
                     st.markdown(
                         "<h2 style='font-size: 24px;'>📌 Analysis Results</h2>",
                         unsafe_allow_html=True
                     )
                     
-                    # Create tabs for different views
                     tab1, tab2 = st.tabs(["Formatted View", "Raw JSON"])
                     
                     with tab1:
@@ -134,5 +137,7 @@ with col_center:
             except Exception as e:
                 st.error(f"⚠️ Connection failed: {e}")
 
-# Add some spacing at the bottom
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Spacing
 st.markdown("<br><br>", unsafe_allow_html=True)
