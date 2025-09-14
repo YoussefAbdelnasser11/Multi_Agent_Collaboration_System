@@ -36,10 +36,10 @@ st.markdown("""
     .logo-container {
         position: absolute;
         top: 10px;
-        right: 10px;
+        left: 10px; /* Changed from right to left */
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: flex-start; /* Changed to flex-start for left alignment */
         margin-top: 0;
         padding-top: 0;
     }
@@ -77,7 +77,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Right side - Logo + Text (moved to top right)
+# Right side - Logo + Text (moved to top left)
 st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
 
 # الكلمة
