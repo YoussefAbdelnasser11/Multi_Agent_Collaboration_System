@@ -63,7 +63,7 @@ with col2:
 # Right side - Logo and Tips Hindawi
 with st.container():
     try:
-        logo = Image.open(".png")
+        logo = Image.open("Tips Hindawi.jpg")
         st.image(logo, width=90)
     except:
         pass
