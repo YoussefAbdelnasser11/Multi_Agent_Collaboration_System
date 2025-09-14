@@ -33,23 +33,26 @@ st.markdown("""
         align-items: center;
         margin-bottom: 10px;
     }
-    .left-header {
+    .logo-container {
+        position: absolute;
+        top: 10px;
+        right: 10px;
         display: flex;
-        align-items: center;
-    }
-    .right-header {
-        display: flex;
-        align-items: center;
-        gap: 10px;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-top: 0;
+        padding-top: 0;
     }
     .logo-text {
         color: #FF0000;
         font-weight: bold;
         font-size: 18px;
-        margin: 0;
+        margin-bottom: 2px;
+        padding: 0;
+        line-height: 1;
     }
     .main-content {
-        margin-top: 20px;
+        margin-top: 50px; /* Adjust to avoid overlap with logo */
     }
     .st-image {
         margin-top: 0;
@@ -63,15 +66,21 @@ st.markdown("""
 st.markdown("<div class='header-container'>", unsafe_allow_html=True)
 
 # Left side - Name
-st.markdown("<div class='left-header'>", unsafe_allow_html=True)
 st.markdown(
     "<p style='font-size:16px; color:#ffffff; margin: 0;'>Made by Eng/Youssef Abdelnasser</p>",
     unsafe_allow_html=True
 )
-st.markdown("</div>", unsafe_allow_html=True)
 
-# Right side - Logo + Text
-st.markdown("<div class='right-header'>", unsafe_allow_html=True)
+# Center - Title
+st.markdown(
+    "<h1 style='text-align: center; margin: 0; font-size: 32px;'>🤖 Multi Agent Collaboration System</h1>",
+    unsafe_allow_html=True
+)
+
+# Right side - Logo + Text (moved to top right)
+st.markdown("<div class='logo-container'>", unsafe_allow_html=True)
+
+# الكلمة
 st.markdown("<p class='logo-text'>Tips Hindawi</p>", unsafe_allow_html=True)
 
 # اللوجو
@@ -79,17 +88,10 @@ try:
     logo = Image.open("Tips Hindawi.jpg")
     st.image(logo, width=90)
 except:
-    st.markdown("<p>[صورة Tips Hindawi]</p>", unsafe_allow_html=True)
+    pass
 
 st.markdown("</div>", unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)  # Close header-container
-
-# Center - Title
-st.markdown(
-    "<h1 style='text-align: center; margin: 20px 0; font-size: 32px;'>🤖 Multi Agent Collaboration System</h1>",
-    unsafe_allow_html=True
-)
-
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # =======================
