@@ -31,7 +31,7 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
     .logo-container {
         display: flex;
@@ -56,21 +56,21 @@ st.markdown(
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.markdown(
-        "<h1 style='text-align: center; margin-top: 10px;'>🤖 Multi Agent Collaboration System</h1>",
+        "<h1 style='text-align: center; margin-top: 20px; font-size: 32px;'>🤖 Multi Agent Collaboration System</h1>",
         unsafe_allow_html=True
     )
 
-# Right side - Logo and Tips Hindawi
+# Right side - Tips Hindawi above logo
 with st.container():
+    st.markdown(
+        "<p style='text-align: right; color:#FF0000; font-weight:bold; margin-bottom: 5px; font-size: 18px;'>Tips Hindawi</p>",
+        unsafe_allow_html=True
+    )
     try:
         logo = Image.open("Tips Hindawi.jpg")
         st.image(logo, width=90)
     except:
         pass
-    st.markdown(
-        "<p style='text-align: right; color:#FF0000; font-weight:bold; margin-top: 0;'>Tips Hindawi</p>",
-        unsafe_allow_html=True
-    )
 
 st.markdown("</div>", unsafe_allow_html=True)
 
@@ -83,9 +83,12 @@ API_URL = "https://f6a6d0a4f2c1.ngrok-free.app"
 API_KEY = "secret123"
 
 # =======================
-# User Interface - Centered Content
+# User Interface - Centered Content with larger font
 # =======================
-st.write("Analyze topics using a collaborative multi-agent system.")
+st.markdown(
+    "<p style='font-size: 18px; text-align: center; margin-top: 30px;'>Analyze topics using a collaborative multi-agent system.</p>",
+    unsafe_allow_html=True
+)
 
 # Center the input and button
 col_left, col_center, col_right = st.columns([1, 2, 1])
@@ -109,16 +112,19 @@ with col_center:
                     data = response.json()
                     st.success("✅ Analysis Complete!")
                     
-                    # Display results in a nice format
-                    st.subheader("📌 Analysis Results")
+                    # Display results in a nice format with larger font
+                    st.markdown(
+                        "<h2 style='font-size: 24px;'>📌 Analysis Results</h2>",
+                        unsafe_allow_html=True
+                    )
                     
                     # Create tabs for different views
                     tab1, tab2 = st.tabs(["Formatted View", "Raw JSON"])
                     
                     with tab1:
-                        st.markdown(f"**Topic:** {data.get('topic', 'N/A')}")
+                        st.markdown(f"<p style='font-size: 18px;'><strong>Topic:</strong> {data.get('topic', 'N/A')}</p>", unsafe_allow_html=True)
                         st.markdown("---")
-                        st.markdown(f"**Result:**\n{data.get('result', 'No result available')}")
+                        st.markdown(f"<p style='font-size: 18px;'><strong>Result:</strong><br>{data.get('result', 'No result available')}</p>", unsafe_allow_html=True)
                     
                     with tab2:
                         st.json(data)
