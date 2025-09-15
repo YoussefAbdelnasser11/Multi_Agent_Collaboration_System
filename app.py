@@ -97,7 +97,7 @@ st.markdown("<hr>", unsafe_allow_html=True)
 # =======================
 # API Config
 # =======================
-API_URL = "https://456c5a3bd3ab.ngrok-free.app/analyze"
+API_URL = "https://456c5a3bd3ab.ngrok-free.app"
 API_KEY = "secret123"
 
 # =======================
