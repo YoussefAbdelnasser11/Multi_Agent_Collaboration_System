@@ -18,7 +18,7 @@ st.set_page_config(
 # Fixed Timeout Settings
 # =======================
 ANALYSIS_TIMEOUT = 300  # 300 ثانية ثابتة
-GENERATION_TIMEOUT = 300  # 300 ثانية ثابتة
+GENERATION_TIMEOUT = 120  # 120 ثانية ثابتة
 
 # =======================
 # Custom CSS Styling
@@ -54,7 +54,7 @@ st.markdown("""
     .red-text {
         color: #FF0000;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 22px;
         text-align: center;
         margin-top: 10px;
         margin-bottom: 10px;
@@ -62,7 +62,7 @@ st.markdown("""
     .creator-name {
         color: #FFFFFF;
         font-weight: bold;
-        font-size: 16px;
+        font-size: 18px;
         text-align: center;
         margin-bottom: 15px;
     }
@@ -98,7 +98,7 @@ with st.sidebar:
     st.markdown('<div class="logo-container">', unsafe_allow_html=True)
     try:
         logo = Image.open("Tips Hindawi.jpg")
-        st.image(logo, width=120, caption="", use_column_width=True)
+        st.image(logo, width=120, caption="")
     except:
         st.info("📷 Logo image not found")
     st.markdown('</div>', unsafe_allow_html=True)
