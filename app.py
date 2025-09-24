@@ -45,8 +45,12 @@ st.markdown("""
     .stProgress > div > div > div > div {
         background: linear-gradient(45deg, #4ECDC4, #45B7D1);
     }
-    .tab-content {
-        padding: 20px;
+    .warning-box {
+        background: rgba(255, 165, 0, 0.1);
+        border: 1px solid orange;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -67,6 +71,11 @@ with st.sidebar:
     API_URL = st.text_input("🌐 API URL", value="https://1d0f745acd0e.ngrok-free.app")
     API_KEY = st.text_input("🔑 API Key", value="secret123", type="password")
     
+    # Timeout settings
+    st.markdown("### ⏱️ Timeout Settings")
+    analysis_timeout = st.number_input("Analysis Timeout (seconds)", min_value=60, max_value=600, value=300, step=30)
+    generation_timeout = st.number_input("Generation Timeout (seconds)", min_value=30, max_value=300, value=120, step=10)
+    
     st.markdown("---")
     st.markdown("### 👨‍💻 Created by")
     st.markdown("**Eng/Youssef Abdelnasser**")
@@ -83,11 +92,19 @@ with st.sidebar:
 tab1, tab2, tab3 = st.tabs(["🚀 Multi-Agent Analysis", "📝 Direct Text Generation", "ℹ️ System Info"])
 
 # =======================
-# TAB 1: Multi-Agent Analysis
+# TAB 1: Multi-Agent Analysis (مع إصلاح الـ Timeout)
 # =======================
 with tab1:
     st.markdown("### 🚀 Multi-Agent Topic Analysis")
     st.markdown("Analyze topics using our collaborative AI agent system")
+    
+    # Warning about processing time
+    st.markdown("""
+    <div class='warning-box'>
+    ⚠️ <strong>Note:</strong> Multi-agent analysis typically takes 2-3 minutes due to comprehensive processing by multiple AI agents.
+    Please be patient and avoid refreshing the page during analysis.
+    </div>
+    """, unsafe_allow_html=True)
     
     col1, col2 = st.columns([3, 1])
     
@@ -95,21 +112,23 @@ with tab1:
         topic = st.text_area(
             "📝 Enter topic for analysis:",
             placeholder="e.g., Artificial intelligence and its impact on the job market...",
-            height=100
+            height=100,
+            key="analysis_topic"
         )
     
     with col2:
         st.markdown("###")
         st.markdown("###")
-        analyze_btn = st.button("🔍 Start Analysis", type="primary", use_container_width=True)
+        analyze_btn = st.button("🔍 Start Analysis", type="primary", use_container_width=True, key="analyze_btn")
     
     # Analysis parameters
     with st.expander("⚙️ Analysis Settings"):
         col1, col2 = st.columns(2)
         with col1:
             show_details = st.checkbox("Show detailed agent outputs", value=True)
-        with col2:
             auto_expand = st.checkbox("Auto-expand results", value=True)
+        with col2:
+            enable_streaming = st.checkbox("Enable progress simulation", value=True)
     
     if analyze_btn and topic.strip():
         if not topic.strip():
@@ -118,27 +137,37 @@ with tab1:
             # Progress tracking
             progress_bar = st.progress(0)
             status_text = st.empty()
+            result_container = st.empty()
             
             try:
-                # Simulate progress steps
-                steps = ["Initializing agents...", "Researching topic...", 
-                        "Summarizing findings...", "Analyzing data...", 
-                        "Generating recommendations...", "Finalizing results..."]
+                # Simulate progress steps (optional)
+                if enable_streaming:
+                    steps = [
+                        "Initializing AI agents...", 
+                        "Researching topic information...", 
+                        "Processing research data...",
+                        "Summarizing key findings...", 
+                        "Analyzing patterns and relationships...", 
+                        "Generating recommendations...",
+                        "Finalizing analysis..."
+                    ]
+                    
+                    for i, step in enumerate(steps):
+                        status_text.text(f"🔄 {step} ({i+1}/{len(steps)})")
+                        progress_bar.progress((i + 1) / len(steps))
+                        time.sleep(2)  # زيادة الوقت بين الخطوات
                 
-                results = {}
+                # Actual API call with increased timeout
+                status_text.text("🔗 Connecting to AI analysis system...")
                 
-                for i, step in enumerate(steps):
-                    status_text.text(f"🔄 {step}")
-                    progress_bar.progress((i + 1) / len(steps))
-                    time.sleep(0.5)  # Simulate processing time
-                
-                # Actual API call
-                status_text.text("🔗 Connecting to AI system...")
                 response = requests.post(
                     f"{API_URL}/analyze",
-                    headers={"Authorization": f"Bearer {API_KEY}"},
+                    headers={
+                        "Authorization": f"Bearer {API_KEY}",
+                        "Content-Type": "application/json"
+                    },
                     json={"topic": topic.strip()},
-                    timeout=120
+                    timeout=analysis_timeout  # استخدام الـ timeout من الإعدادات
                 )
                 
                 if response.status_code == 200:
@@ -146,30 +175,44 @@ with tab1:
                     progress_bar.progress(100)
                     status_text.text("✅ Analysis complete!")
                     
-                    # Display results in an organized way
-                    st.balloons()
-                    
-                    # Main results card
-                    with st.container():
+                    # Display results
+                    with result_container.container():
+                        st.balloons()
+                        
+                        # Main results card
                         st.markdown("### 📊 Analysis Results")
                         
                         # Topic header
-                        st.markdown(f"**Topic:** {data.get('topic', 'N/A')}")
+                        st.markdown(f"**Topic:** `{data.get('topic', 'N/A')}`")
+                        st.markdown("---")
                         
                         # Results in expandable sections
                         if show_details:
                             with st.expander("🔬 Research Data", expanded=auto_expand):
-                                st.markdown(f"<div class='result-box'>{data.get('research_data', 'No data')}</div>", unsafe_allow_html=True)
+                                research_content = data.get('research_data', 'No research data available')
+                                st.markdown(f"<div class='result-box'>{research_content}</div>", unsafe_allow_html=True)
                             
                             with st.expander("📋 Summary", expanded=auto_expand):
-                                st.markdown(f"<div class='result-box'>{data.get('summary', 'No summary')}</div>", unsafe_allow_html=True)
+                                summary_content = data.get('summary', 'No summary available')
+                                st.markdown(f"<div class='result-box'>{summary_content}</div>", unsafe_allow_html=True)
                             
                             with st.expander("🔍 Analysis", expanded=auto_expand):
-                                st.markdown(f"<div class='result-box'>{data.get('analysis', 'No analysis')}</div>", unsafe_allow_html=True)
+                                analysis_content = data.get('analysis', 'No analysis available')
+                                st.markdown(f"<div class='result-box'>{analysis_content}</div>", unsafe_allow_html=True)
                         
                         # Recommendations (always shown)
                         st.markdown("### 🎯 Final Recommendations")
-                        st.markdown(f"<div class='result-box' style='border-left-color: #FF6B6B;'>{data.get('recommendations', 'No recommendations')}</div>", unsafe_allow_html=True)
+                        recommendations_content = data.get('recommendations', 'No recommendations available')
+                        st.markdown(f"<div class='result-box' style='border-left-color: #FF6B6B;'>{recommendations_content}</div>", unsafe_allow_html=True)
+                        
+                        # Success metrics
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.success("✅ Research Completed")
+                        with col2:
+                            st.success("✅ Analysis Finished")
+                        with col3:
+                            st.success("✅ Recommendations Ready")
                         
                         # Raw JSON view
                         with st.expander("📄 Raw JSON Data"):
@@ -178,34 +221,36 @@ with tab1:
                         # Download option
                         json_str = json.dumps(data, indent=2, ensure_ascii=False)
                         st.download_button(
-                            label="📥 Download Results as JSON",
+                            label="📥 Download Full Analysis (JSON)",
                             data=json_str,
-                            file_name=f"analysis_{topic[:30]}.json",
-                            mime="application/json"
+                            file_name=f"ai_analysis_{topic[:20].replace(' ', '_')}.json",
+                            mime="application/json",
+                            use_container_width=True
                         )
                         
                 else:
                     st.error(f"❌ API Error: {response.status_code} - {response.text}")
                     
             except requests.exceptions.Timeout:
-                st.error("⏰ Request timeout - The analysis is taking too long")
+                st.error(f"⏰ Request timeout ({analysis_timeout}s) - The analysis is taking longer than expected")
+                st.info("💡 Try reducing the topic complexity or increasing the timeout in settings")
             except requests.exceptions.ConnectionError:
-                st.error("🔌 Connection error - Please check the API URL")
+                st.error("🔌 Connection error - Please check the API URL and internet connection")
             except Exception as e:
                 st.error(f"⚠️ Unexpected error: {str(e)}")
             
             finally:
-                # Clean up progress indicators
-                time.sleep(2)
+                # Clean up progress indicators after delay
+                time.sleep(3)
                 progress_bar.empty()
                 status_text.empty()
 
 # =======================
-# TAB 2: Direct Text Generation
+# TAB 2: Direct Text Generation (مع إصلاح الـ Timeout)
 # =======================
 with tab2:
     st.markdown("### 📝 Direct Text Generation")
-    st.markdown("Generate text directly using the AI model")
+    st.markdown("Generate text directly using the AI model (Faster - usually under 1 minute)")
     
     col1, col2 = st.columns([3, 1])
     
@@ -213,67 +258,72 @@ with tab2:
         prompt = st.text_area(
             "💬 Enter your prompt:",
             placeholder="e.g., Explain quantum computing in simple terms...",
-            height=100
+            height=100,
+            key="generation_prompt"
         )
     
     with col2:
         st.markdown("###")
         st.markdown("###")
-        generate_btn = st.button("✨ Generate Text", type="secondary", use_container_width=True)
+        generate_btn = st.button("✨ Generate Text", type="secondary", use_container_width=True, key="generate_btn")
     
     # Generation settings
     with st.expander("⚙️ Generation Settings"):
         col1, col2 = st.columns(2)
         with col1:
             max_length = st.slider("Max length", 100, 2000, 500, 100)
-            temperature = st.slider("Temperature", 0.1, 1.0, 0.7, 0.1)
         with col2:
-            top_k = st.slider("Top-K", 1, 100, 50)
-            top_p = st.slider("Top-P", 0.1, 1.0, 0.95, 0.05)
+            quick_generation = st.checkbox("Quick generation mode", value=True)
     
     if generate_btn and prompt.strip():
         try:
-            with st.spinner("Generating text..."):
+            with st.spinner(f"Generating text (timeout: {generation_timeout}s)..."):
                 response = requests.post(
                     f"{API_URL}/generate",
-                    headers={"Authorization": f"Bearer {API_KEY}"},
+                    headers={
+                        "Authorization": f"Bearer {API_KEY}",
+                        "Content-Type": "application/json"
+                    },
                     json={
                         "prompt": prompt.strip(),
                         "max_length": max_length
                     },
-                    timeout=60
+                    timeout=generation_timeout  # استخدام الـ timeout من الإعدادات
                 )
             
             if response.status_code == 200:
                 data = response.json()
+                generated_text = data.get('generated_text', '')
                 
                 st.success("✅ Text generated successfully!")
                 
                 # Display generated text
                 st.markdown("### 📄 Generated Text")
-                st.markdown(f"<div class='result-box'>{data.get('generated_text', 'No text generated')}</div>", unsafe_allow_html=True)
+                st.markdown(f"<div class='result-box'>{generated_text}</div>", unsafe_allow_html=True)
                 
                 # Text stats
                 col1, col2, col3 = st.columns(3)
-                text_content = data.get('generated_text', '')
                 with col1:
-                    st.metric("Characters", len(text_content))
+                    st.metric("Characters", len(generated_text))
                 with col2:
-                    st.metric("Words", len(text_content.split()))
+                    st.metric("Words", len(generated_text.split()))
                 with col3:
-                    st.metric("Lines", text_content.count('\n') + 1)
+                    st.metric("Lines", generated_text.count('\n') + 1)
                 
                 # Download option
                 st.download_button(
                     label="📥 Download Text",
-                    data=text_content,
-                    file_name=f"generated_text_{prompt[:20]}.txt",
-                    mime="text/plain"
+                    data=generated_text,
+                    file_name=f"generated_text_{prompt[:20].replace(' ', '_')}.txt",
+                    mime="text/plain",
+                    use_container_width=True
                 )
                 
             else:
                 st.error(f"❌ Generation error: {response.status_code} - {response.text}")
                 
+        except requests.exceptions.Timeout:
+            st.error(f"⏰ Generation timeout ({generation_timeout}s) - Try reducing text length")
         except Exception as e:
             st.error(f"⚠️ Error: {str(e)}")
 
@@ -306,23 +356,27 @@ with tab3:
     with col2:
         st.markdown("#### 📊 System Status")
         
-        # Health check
+        # Health check with timeout
         try:
             health_response = requests.get(f"{API_URL}/health", timeout=10)
             if health_response.status_code == 200:
                 st.success("✅ System is online and healthy")
                 st.metric("Status", "Operational")
+                st.metric("Current Timeout", f"{analysis_timeout}s")
             else:
                 st.warning("⚠️ System response unexpected")
+        except requests.exceptions.Timeout:
+            st.error("❌ Health check timeout")
         except:
             st.error("❌ Cannot connect to system")
         
-        st.markdown("#### 🔄 Recent Activity")
-        st.info("No recent activity to display")
-        
-        st.markdown("#### 📈 Performance")
-        st.metric("Response Time", "~2-3 minutes")
-        st.metric("Max Topic Length", "Unlimited")
+        st.markdown("#### ⚠️ Important Notes")
+        st.info("""
+        - **Analysis Time**: 2-3 minutes for complex topics
+        - **Generation Time**: 30-60 seconds for direct generation  
+        - **Timeout**: Adjust in sidebar if experiencing issues
+        - **Stability**: ngrok URLs may change after restart
+        """)
 
 # =======================
 # Footer
