@@ -18,7 +18,7 @@ st.set_page_config(
 # Fixed Timeout Settings
 # =======================
 ANALYSIS_TIMEOUT = 300  # 300 ثانية ثابتة
-GENERATION_TIMEOUT = 120  # 120 ثانية ثابتة
+GENERATION_TIMEOUT = 300  # 300 ثانية ثابتة
 
 # =======================
 # Custom CSS Styling
@@ -54,7 +54,7 @@ st.markdown("""
     .red-text {
         color: #FF0000;
         font-weight: bold;
-        font-size: 22px;
+        font-size: 18px;
         text-align: center;
         margin-top: 10px;
         margin-bottom: 10px;
@@ -62,7 +62,7 @@ st.markdown("""
     .creator-name {
         color: #FFFFFF;
         font-weight: bold;
-        font-size: 18px;
+        font-size: 16px;
         text-align: center;
         margin-bottom: 15px;
     }
