@@ -56,11 +56,19 @@ st.markdown("""
         font-weight: bold;
         font-size: 22px;
         text-align: center;
-        margin-bottom: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .creator-name {
+        color: #FFFFFF;
+        font-weight: bold;
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 15px;
     }
     .logo-container {
         text-align: center;
-        margin-top: 10px;
+        margin: 10px 0;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -83,21 +91,20 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # Logo section with red text and larger size
-    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
-    st.markdown('<div class="red-text">Tips Hindawi</div>', unsafe_allow_html=True)
+    # الترتيب الجديد: اسمك أولاً
+    st.markdown('<div class="creator-name">Eng/Youssef Abdelnasser</div>', unsafe_allow_html=True)
     
+    # ثم اللوجو
+    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
     try:
         logo = Image.open("Tips Hindawi.jpg")
-        st.image(logo, width=120, caption="")  # زيادة حجم اللوجو
+        st.image(logo, width=120, caption="", use_column_width=True)
     except:
         st.info("📷 Logo image not found")
-    
     st.markdown('</div>', unsafe_allow_html=True)
     
-    st.markdown("---")
-    st.markdown("### 👨‍💻 Created by")
-    st.markdown("**Eng/Youssef Abdelnasser**")
+    # ثم كلمة Tips Hindawi تحت اللوجو مباشرة
+    st.markdown('<div class="red-text">Tips Hindawi</div>', unsafe_allow_html=True)
 
 # =======================
 # Main Tabs
