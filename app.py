@@ -91,19 +91,22 @@ with st.sidebar:
     
     st.markdown("---")
     
-    # الترتيب الجديد: اسمك أولاً
+    # اسمك فقط بدون "Created by"
     st.markdown('<div class="creator-name">Eng/Youssef Abdelnasser</div>', unsafe_allow_html=True)
     
-    # ثم اللوجو
+    # الصورة في نص المكان
     st.markdown('<div class="logo-container">', unsafe_allow_html=True)
     try:
         logo = Image.open("Tips Hindawi.jpg")
-        st.image(logo, width=120, caption="")
+        # الصورة في الوسط بحجم مناسب
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            st.image(logo, width=150, caption="")  # زيادة حجم الصورة
     except:
         st.info("📷 Logo image not found")
     st.markdown('</div>', unsafe_allow_html=True)
     
-    # ثم كلمة Tips Hindawi تحت اللوجو مباشرة
+    # Tips Hindawi تحت الصورة مباشرة
     st.markdown('<div class="red-text">Tips Hindawi</div>', unsafe_allow_html=True)
 
 # =======================
