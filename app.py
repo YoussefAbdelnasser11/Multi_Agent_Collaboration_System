@@ -15,6 +15,12 @@ st.set_page_config(
 )
 
 # =======================
+# Fixed Timeout Settings
+# =======================
+ANALYSIS_TIMEOUT = 300  # 300 ثانية ثابتة
+GENERATION_TIMEOUT = 120  # 120 ثانية ثابتة
+
+# =======================
 # Custom CSS Styling
 # =======================
 st.markdown("""
@@ -74,14 +80,6 @@ with st.sidebar:
     # API Configuration
     API_URL = st.text_input("🌐 API URL", value="https://1d0f745acd0e.ngrok-free.app")
     API_KEY = st.text_input("🔑 API Key", value="secret123", type="password")
-    
-    # Fixed timeout settings
-    st.markdown("### ⏱️ Timeout Settings")
-    analysis_timeout = 300  # ثابت 300 ثانية
-    generation_timeout = 120  # ثابت 120 ثانية
-    
-    st.info(f"⏰ Analysis timeout: {analysis_timeout}s (Fixed)")
-    st.info(f"⚡ Generation timeout: {generation_timeout}s (Fixed)")
     
     st.markdown("---")
     
@@ -172,7 +170,7 @@ with tab1:
                         "Content-Type": "application/json"
                     },
                     json={"topic": topic.strip()},
-                    timeout=analysis_timeout
+                    timeout=ANALYSIS_TIMEOUT
                 )
                 
                 if response.status_code == 200:
@@ -237,7 +235,7 @@ with tab1:
                     st.error(f"❌ API Error: {response.status_code} - {response.text}")
                     
             except requests.exceptions.Timeout:
-                st.error(f"⏰ Request timeout ({analysis_timeout}s) - The analysis is taking longer than expected")
+                st.error(f"⏰ Request timeout ({ANALYSIS_TIMEOUT}s) - The analysis is taking longer than expected")
             except requests.exceptions.ConnectionError:
                 st.error("🔌 Connection error - Please check the API URL and internet connection")
             except Exception as e:
@@ -288,7 +286,7 @@ with tab2:
                         "prompt": prompt.strip(),
                         "max_length": max_length
                     },
-                    timeout=generation_timeout
+                    timeout=GENERATION_TIMEOUT
                 )
             
             if response.status_code == 200:
@@ -323,7 +321,7 @@ with tab2:
                 st.error(f"❌ Generation error: {response.status_code} - {response.text}")
                 
         except requests.exceptions.Timeout:
-            st.error(f"⏰ Generation timeout ({generation_timeout}s) - Try reducing text length")
+            st.error(f"⏰ Generation timeout ({GENERATION_TIMEOUT}s) - Try reducing text length")
         except Exception as e:
             st.error(f"⚠️ Error: {str(e)}")
 
@@ -362,8 +360,6 @@ with tab3:
             if health_response.status_code == 200:
                 st.success("✅ System is online and healthy")
                 st.metric("Status", "Operational")
-                st.metric("Analysis Timeout", f"{analysis_timeout}s")
-                st.metric("Generation Timeout", f"{generation_timeout}s")
             else:
                 st.warning("⚠️ System response unexpected")
         except:
@@ -373,7 +369,7 @@ with tab3:
         st.info("""
         - **Analysis**: Comprehensive multi-agent processing
         - **Generation**: Fast direct text generation
-        - **Reliability**: Stable connection with fixed timeouts
+        - **Reliability**: Stable connection with optimized timeouts
         """)
 
 # =======================
