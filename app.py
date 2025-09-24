@@ -45,12 +45,16 @@ st.markdown("""
     .stProgress > div > div > div > div {
         background: linear-gradient(45deg, #4ECDC4, #45B7D1);
     }
-    .warning-box {
-        background: rgba(255, 165, 0, 0.1);
-        border: 1px solid orange;
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
+    .red-text {
+        color: #FF0000;
+        font-weight: bold;
+        font-size: 22px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+    .logo-container {
+        text-align: center;
+        margin-top: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -71,20 +75,31 @@ with st.sidebar:
     API_URL = st.text_input("🌐 API URL", value="https://1d0f745acd0e.ngrok-free.app")
     API_KEY = st.text_input("🔑 API Key", value="secret123", type="password")
     
-    # Timeout settings
+    # Fixed timeout settings
     st.markdown("### ⏱️ Timeout Settings")
-    analysis_timeout = st.number_input("Analysis Timeout (seconds)", min_value=60, max_value=600, value=300, step=30)
-    generation_timeout = st.number_input("Generation Timeout (seconds)", min_value=30, max_value=300, value=120, step=10)
+    analysis_timeout = 300  # ثابت 300 ثانية
+    generation_timeout = 120  # ثابت 120 ثانية
+    
+    st.info(f"⏰ Analysis timeout: {analysis_timeout}s (Fixed)")
+    st.info(f"⚡ Generation timeout: {generation_timeout}s (Fixed)")
+    
+    st.markdown("---")
+    
+    # Logo section with red text and larger size
+    st.markdown('<div class="logo-container">', unsafe_allow_html=True)
+    st.markdown('<div class="red-text">Tips Hindawi</div>', unsafe_allow_html=True)
+    
+    try:
+        logo = Image.open("Tips Hindawi.jpg")
+        st.image(logo, width=120, caption="")  # زيادة حجم اللوجو
+    except:
+        st.info("📷 Logo image not found")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown("---")
     st.markdown("### 👨‍💻 Created by")
     st.markdown("**Eng/Youssef Abdelnasser**")
-    
-    try:
-        logo = Image.open("Tips Hindawi.jpg")
-        st.image(logo, width=100, caption="Tips Hindawi")
-    except:
-        st.info("📷 Logo image not found")
 
 # =======================
 # Main Tabs
@@ -92,19 +107,11 @@ with st.sidebar:
 tab1, tab2, tab3 = st.tabs(["🚀 Multi-Agent Analysis", "📝 Direct Text Generation", "ℹ️ System Info"])
 
 # =======================
-# TAB 1: Multi-Agent Analysis (مع إصلاح الـ Timeout)
+# TAB 1: Multi-Agent Analysis
 # =======================
 with tab1:
     st.markdown("### 🚀 Multi-Agent Topic Analysis")
     st.markdown("Analyze topics using our collaborative AI agent system")
-    
-    # Warning about processing time
-    st.markdown("""
-    <div class='warning-box'>
-    ⚠️ <strong>Note:</strong> Multi-agent analysis typically takes 2-3 minutes due to comprehensive processing by multiple AI agents.
-    Please be patient and avoid refreshing the page during analysis.
-    </div>
-    """, unsafe_allow_html=True)
     
     col1, col2 = st.columns([3, 1])
     
@@ -126,9 +133,8 @@ with tab1:
         col1, col2 = st.columns(2)
         with col1:
             show_details = st.checkbox("Show detailed agent outputs", value=True)
-            auto_expand = st.checkbox("Auto-expand results", value=True)
         with col2:
-            enable_streaming = st.checkbox("Enable progress simulation", value=True)
+            auto_expand = st.checkbox("Auto-expand results", value=True)
     
     if analyze_btn and topic.strip():
         if not topic.strip():
@@ -140,24 +146,23 @@ with tab1:
             result_container = st.empty()
             
             try:
-                # Simulate progress steps (optional)
-                if enable_streaming:
-                    steps = [
-                        "Initializing AI agents...", 
-                        "Researching topic information...", 
-                        "Processing research data...",
-                        "Summarizing key findings...", 
-                        "Analyzing patterns and relationships...", 
-                        "Generating recommendations...",
-                        "Finalizing analysis..."
-                    ]
-                    
-                    for i, step in enumerate(steps):
-                        status_text.text(f"🔄 {step} ({i+1}/{len(steps)})")
-                        progress_bar.progress((i + 1) / len(steps))
-                        time.sleep(2)  # زيادة الوقت بين الخطوات
+                # Simulate progress steps
+                steps = [
+                    "Initializing AI agents...", 
+                    "Researching topic information...", 
+                    "Processing research data...",
+                    "Summarizing key findings...", 
+                    "Analyzing patterns and relationships...", 
+                    "Generating recommendations...",
+                    "Finalizing analysis..."
+                ]
                 
-                # Actual API call with increased timeout
+                for i, step in enumerate(steps):
+                    status_text.text(f"🔄 {step} ({i+1}/{len(steps)})")
+                    progress_bar.progress((i + 1) / len(steps))
+                    time.sleep(2)
+                
+                # Actual API call with fixed timeout
                 status_text.text("🔗 Connecting to AI analysis system...")
                 
                 response = requests.post(
@@ -167,7 +172,7 @@ with tab1:
                         "Content-Type": "application/json"
                     },
                     json={"topic": topic.strip()},
-                    timeout=analysis_timeout  # استخدام الـ timeout من الإعدادات
+                    timeout=analysis_timeout
                 )
                 
                 if response.status_code == 200:
@@ -233,7 +238,6 @@ with tab1:
                     
             except requests.exceptions.Timeout:
                 st.error(f"⏰ Request timeout ({analysis_timeout}s) - The analysis is taking longer than expected")
-                st.info("💡 Try reducing the topic complexity or increasing the timeout in settings")
             except requests.exceptions.ConnectionError:
                 st.error("🔌 Connection error - Please check the API URL and internet connection")
             except Exception as e:
@@ -246,11 +250,11 @@ with tab1:
                 status_text.empty()
 
 # =======================
-# TAB 2: Direct Text Generation (مع إصلاح الـ Timeout)
+# TAB 2: Direct Text Generation
 # =======================
 with tab2:
     st.markdown("### 📝 Direct Text Generation")
-    st.markdown("Generate text directly using the AI model (Faster - usually under 1 minute)")
+    st.markdown("Generate text directly using the AI model")
     
     col1, col2 = st.columns([3, 1])
     
@@ -269,15 +273,11 @@ with tab2:
     
     # Generation settings
     with st.expander("⚙️ Generation Settings"):
-        col1, col2 = st.columns(2)
-        with col1:
-            max_length = st.slider("Max length", 100, 2000, 500, 100)
-        with col2:
-            quick_generation = st.checkbox("Quick generation mode", value=True)
+        max_length = st.slider("Max length", 100, 2000, 500, 100)
     
     if generate_btn and prompt.strip():
         try:
-            with st.spinner(f"Generating text (timeout: {generation_timeout}s)..."):
+            with st.spinner("Generating text..."):
                 response = requests.post(
                     f"{API_URL}/generate",
                     headers={
@@ -288,7 +288,7 @@ with tab2:
                         "prompt": prompt.strip(),
                         "max_length": max_length
                     },
-                    timeout=generation_timeout  # استخدام الـ timeout من الإعدادات
+                    timeout=generation_timeout
                 )
             
             if response.status_code == 200:
@@ -356,26 +356,24 @@ with tab3:
     with col2:
         st.markdown("#### 📊 System Status")
         
-        # Health check with timeout
+        # Health check
         try:
             health_response = requests.get(f"{API_URL}/health", timeout=10)
             if health_response.status_code == 200:
                 st.success("✅ System is online and healthy")
                 st.metric("Status", "Operational")
-                st.metric("Current Timeout", f"{analysis_timeout}s")
+                st.metric("Analysis Timeout", f"{analysis_timeout}s")
+                st.metric("Generation Timeout", f"{generation_timeout}s")
             else:
                 st.warning("⚠️ System response unexpected")
-        except requests.exceptions.Timeout:
-            st.error("❌ Health check timeout")
         except:
             st.error("❌ Cannot connect to system")
         
-        st.markdown("#### ⚠️ Important Notes")
+        st.markdown("#### ⚡ Performance")
         st.info("""
-        - **Analysis Time**: 2-3 minutes for complex topics
-        - **Generation Time**: 30-60 seconds for direct generation  
-        - **Timeout**: Adjust in sidebar if experiencing issues
-        - **Stability**: ngrok URLs may change after restart
+        - **Analysis**: Comprehensive multi-agent processing
+        - **Generation**: Fast direct text generation
+        - **Reliability**: Stable connection with fixed timeouts
         """)
 
 # =======================
